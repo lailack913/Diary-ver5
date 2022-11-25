@@ -1,0 +1,209 @@
+  Future proprtyImg_selector() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result==null) return print("file is null");
+    setState(() {
+      proprtyImg = result.files.first;
+      print("the file path $proprtyImg");
+    });
+  }
+  Future proprtyImg_uploader() async {
+    final path = 'Diary/${proprtyImg!.name}';
+    final file = File(proprtyImg!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    setState(() {
+      uploadTask =  ref.putFile(file);
+
+    });
+
+
+    /// home
+
+    Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(20),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            color: Color(0xFFE5F7D1),
+                          ),
+                          child:  Icon(Icons.search, size: 23.sp,color: Color(0xFF504F46),),
+                        ),
+
+                        SizedBox(width: 20,),
+                        Expanded(
+                            child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  color: Color(0xFFE5F7D1),
+                                ),
+
+                                child:  Directionality
+                                  (textDirection: TextDirection.rtl,
+                                  child: TextFormField(
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(20),
+                                      filled: false,
+                                      border: InputBorder.none,
+                                      hintText: "بحث عن ",
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide(color:  Color(0xFFE5F7D1))
+                                      )
+                                  ),
+                                ),)
+                            )),
+                      ],
+                    ),
+                  ),
+
+   post_templates.main_post(context,
+                                    property_type,
+                                    residential_main_img,
+                                    residential_type,
+                                    residential_sell_rent,
+                                    residential_city,
+                                    residential_district,
+                                    residential_location_link,
+                                    residential_area,
+                                    residential_interface,
+                                    residential_depth,
+                                    residential_price,
+                                    residential_price_type,
+                                    residential_room,
+                                    residential_hall,
+                                    residential_kitchen,
+                                    residential_bathroom,
+                                    residential_garden,
+                                    residential_carage,
+                                    residential_owner,
+                                    residential_owner_phone,
+                                    residential_property_describtion,
+                                    residential_property_state,
+                                    residential_title_deed,
+
+                                    store_main_img,
+                                    store_sell_rent,
+                                    store_city,
+                                    store_district,
+                                    store_location_link,
+                                    store_area,
+                                    store_interface,
+                                    store_depth,
+                                    store_price,
+                                    store_price_type,
+                                    store_owner,
+                                    store_owner_phone,
+                                    store_property_describtion,
+                                    store_property_state,
+                                    store_title_deed,
+
+                                    land_main_img,
+                                    land_land_type,
+                                    land_city,
+                                    land_district,
+                                    land_location_link,
+                                    land_area,
+                                    land_area_type,
+                                    land_interface,
+                                    land_depth,
+                                    land_price,
+                                    land_price_type,
+                                    land_owner,
+                                    land_owner_phone,
+                                    land_property_describtion,
+                                    land_property_state,
+                                    land_title_deed,
+
+                                    buildings_main_img,
+                                    buildings_building_type,
+                                    buildings_sell_rent,
+                                    buildings_city,
+                                    buildings_district,
+                                    buildings_location_link,
+                                    buildings_area,
+                                    buildings_interface,
+                                    buildings_depth,
+                                    buildings_price,
+                                    buildings_price_type,
+                                    buildings_floors,
+                                    buildings_owner,
+                                    buildings_owner_phone,
+                                    buildings_property_describtion,
+                                    buildings_property_state,
+                                    buildings_title_deed
+                                )
+
+  Future b_data() async{
+    var url=Uri.parse("http://localhost:7373/show/b");
+    Response response= await get(url);
+
+    int statusCode = response.statusCode;
+
+    String body =response.body;
+
+    List<dynamic> b_list= json.decode(body);
+
+    print(body);
+
+
+    setState(() {
+      for (int i=0; i<b_list.length; i++){
+
+
+      }
+    });
+
+
+
+  }
+
+  void b_initState(){
+    super.initState();
+    b_data();
+  }
+
+  List<dynamic> name = [];
+  List<dynamic> img_url = [];
+  List<dynamic> Description = [];
+  List<dynamic> price = [];
+  List<dynamic> location = [];
+  List<dynamic> Rating = [];
+  List<dynamic> id_Item = [];
+
+  Future getd() async {
+    var url=Uri.parse("http://localhost:4000");
+    Response response= await get(url);
+
+    String body =response.body;
+
+    List<dynamic> list1=json.decode(body);
+
+    setState(() {
+      for (int i=0; i<list1.length; i++){
+        name.add(list1[i]["sale_or_rent"]);
+        img_url.add(list1[i]["type_build"]);
+        Description.add(list1[i]["floor_number"]);
+        price.add(list1[i]["room_number"]);
+        location.add(list1[i]["kichen"]);
+        Rating.add(list1[i]["space"]);
+        id_Item.add(list1[i]["interace"]);
+
+      }
+    });
+
+
+  }
+
+  void initStat(){
+    super.initState();
+    getd();
+  }
